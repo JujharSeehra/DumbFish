@@ -48,6 +48,7 @@ pieces = {
 LIGHT = (240,217,181)
 DARK = (181,136,99)
 WHITE = (255,255,255)
+RED = (255,78,78)
 
 selected_square = None
 
@@ -166,6 +167,7 @@ while True:
                         elif allFunctions.is_in_check(6 if player == 1 else -6):
                             print(f"Check from {"Black" if player == 1 else "White"}!")
 
+
                         if allFunctions.turn % 2 == 1 and not game_over:
                             computer_move()
 
@@ -180,10 +182,13 @@ while True:
 
     for rows in range(8):
         for cols in range(8):
+            piece = allFunctions.pieceArray[rows][cols]
             if (rows+cols) % 2 == 0:
                 color = LIGHT 
-            else: 
+            elif (rows+cols) % 2 == 1: 
                 color = DARK
+            elif allFunctions.is_in_check(piece):
+                color = RED
 
             x = cols * 80
             y = rows * 80

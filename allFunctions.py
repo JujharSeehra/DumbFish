@@ -591,7 +591,7 @@ def get_piece_table(piece, game_phase = 1.0):
 
     return None
 
-def evaluate_mobility(board, is_valid_move, move_leaves_king_in_check, game_phase):
+# def evaluate_mobility(board, is_valid_move, move_leaves_king_in_check, game_phase):
 
     white_moves = 0
     black_moves = 0
@@ -1000,6 +1000,168 @@ def make_engine_move(old_row, old_col, new_row, new_col):
     update_castling_rights( moving_piece, old_row, old_col, new_row, new_col)
 
     turn += 1
+
+def make_search_move(old_row, old_col, new_row, new_col):
+    global turn
+    global en_passant_target
+
+    moving_piece = pieceArray[old_row][old_col]
+    captured_piece = pieceArray[new_row][new_col]
+
+    undo_info = {
+        "old_row": old_row,
+        "old_col": old_col,
+        "new_row": new_row,
+        "new_col": new_col,
+        "moving_piece": moving_piece,
+        "captured_piece": captured_piece,
+        "en_passant_target": en_passant_target,
+        "white_king_moved": white_king_moved,
+        "black_king_moved": black_king_moved,
+        "white_left_rook_moved": white_left_rook_moved,
+        "white_right_rook_moved": white_right_rook_moved,
+
+        "black_left_rook_moved": black_left_rook_moved,
+        "black_right_rook_moved": black_right_rook_moved,
+
+        "turn": turn
+    }
+    is_en_passant = can_en_passant(old_row, old_col, new_row, new_col)
+    if is_en_passant:
+        undo_info["en_passant_captured"] = pieceArray[old_row][new_col]
+    else:
+        undo_info["en_passant_captured"] = 0
+    pieceArray[new_row][new_col] = moving_piece
+    pieceArray[old_row][old_col] = 0
+    if is_en_passant:
+        pieceArray[old_row][new_col] = 0
+
+    if moving_piece == 6:
+
+        if old_row == 7 and old_col == 4:
+
+            if new_row == 7 and new_col == 6:
+                pieceArray[7][5] = pieceArray[7][7]
+                pieceArray[7][7] = 0
+
+                undo_info["castle"] = "white_right"
+
+            elif new_row == 7 and new_col == 2:
+                pieceArray[7][3] = pieceArray[7][0]
+                pieceArray[7][0] = 0
+
+                undo_info["castle"] = "white_left"
+
+            else:
+                undo_info["castle"] = None
+
+        else:
+            undo_info["castle"] = None
+
+    elif moving_piece == -6:
+
+        if old_row == 0 and old_col == 4:
+
+            if new_row == 0 and new_col == 6:
+                pieceArray[0][5] = pieceArray[0][7]
+                pieceArray[0][7] = 0
+
+                undo_info["castle"] = "black_right"
+
+            elif new_row == 0 and new_col == 2:
+                pieceArray[0][3] = pieceArray[0][0]
+                pieceArray[0][0] = 0
+
+                undo_info["castle"] = "black_left"
+
+            else:
+                undo_info["castle"] = None
+
+        else:
+            undo_info["castle"] = None
+
+    else:
+        undo_info["castle"] = None
+
+    if moving_piece == 1 and new_row == 0:
+        pieceArray[new_row][new_col] = 2
+
+    elif moving_piece == -1 and new_row == 7:
+        pieceArray[new_row][new_col] = -2
+
+    en_passant_target = None
+
+    if moving_piece == 1 and old_row == 6 and new_row == 4:
+        en_passant_target = (5, old_col)
+
+    elif moving_piece == -1 and old_row == 1 and new_row == 3:
+        en_passant_target = (2, old_col)
+
+    update_castling_rights(moving_piece, old_row, old_col, new_row, new_col)
+
+    turn += 1
+
+    return undo_info
+
+def undo_search_move(undo_info):
+
+    global turn
+    global en_passant_target
+
+    global white_king_moved
+    global black_king_moved
+
+    global white_left_rook_moved
+    global white_right_rook_moved
+
+    global black_left_rook_moved
+    global black_right_rook_moved
+
+    old_row = undo_info["old_row"]
+    old_col = undo_info["old_col"]
+    new_row = undo_info["new_row"]
+    new_col = undo_info["new_col"]
+
+    pieceArray[old_row][old_col] = undo_info["moving_piece"]
+    pieceArray[new_row][new_col] = undo_info["captured_piece"]
+
+    if undo_info["en_passant_captured"] != 0:
+        pieceArray[old_row][new_col] = undo_info["en_passant_captured"]
+
+    castle = undo_info["castle"]
+
+    if castle == "white_right":
+
+        pieceArray[7][7] = pieceArray[7][5]
+        pieceArray[7][5] = 0
+
+    elif castle == "white_left":
+
+        pieceArray[7][0] = pieceArray[7][3]
+        pieceArray[7][3] = 0
+
+    elif castle == "black_right":
+
+        pieceArray[0][7] = pieceArray[0][5]
+        pieceArray[0][5] = 0
+
+    elif castle == "black_left":
+
+        pieceArray[0][0] = pieceArray[0][3]
+        pieceArray[0][3] = 0
+
+    en_passant_target = undo_info["en_passant_target"]
+
+    white_king_moved = undo_info["white_king_moved"]
+    black_king_moved = undo_info["black_king_moved"]
+
+    white_left_rook_moved = undo_info["white_left_rook_moved"]
+    white_right_rook_moved = undo_info["white_right_rook_moved"]
+
+    black_left_rook_moved = undo_info["black_left_rook_moved"]
+    black_right_rook_moved = undo_info["black_right_rook_moved"]
+
+    turn = undo_info["turn"]
 
 def update_castling_rights(moving_piece, old_row, old_col, new_row, new_col):
 

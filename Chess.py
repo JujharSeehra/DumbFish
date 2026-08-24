@@ -55,7 +55,7 @@ def computer_move():
 
     print("COMPUTER TURN START")
 
-    move = engine.find_best_move(depth=3)
+    move = engine.find_best_move(depth=5)
 
     if move is None:
         return
@@ -76,7 +76,6 @@ def computer_move():
         new_col
     )
 
-    # Promotion
     for col in range(8):
 
         if allFunctions.pieceArray[7][col] == -1:

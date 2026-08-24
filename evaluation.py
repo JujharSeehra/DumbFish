@@ -24,7 +24,7 @@ def evaluate_board(board, is_valid_move, move_leaves_king_in_check, is_in_check,
             else:
                 score -= table[7 - row][col]
 
-    score += allFunctions.evaluate_mobility(board, is_valid_move, move_leaves_king_in_check, game_phase)
+    # score += allFunctions.evaluate_mobility(board, is_valid_move, move_leaves_king_in_check, game_phase)
 
     score += allFunctions.evaluate_king_safety(board, is_in_check, can_attack_square, game_phase)
 

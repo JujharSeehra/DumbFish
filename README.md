@@ -1,8 +1,8 @@
-DumbFish ♟️
+DumbFish
 
-DumbFish is a chess engine built from scratch in Python. It uses a custom evaluation function and alpha-beta search to select moves.
-
-Play DumbFish
+DumbFish is a Chess Engine that I built using Python to play against myself, and it has reached the level of a 1400 Chess Player and has beaten the Chess.com 1600 Engine Bot.
+I had a very enjoyable experience while building this project, and I learnt valuable things about PyGame, Algorithms, how real chess engines work, and many other things!
+Thank you for looking at my project, and I hope you have a fun time playing against this Chess Engine!
 
 Download the Latest Release
 
@@ -14,56 +14,17 @@ The easiest way to run DumbFish is to download the latest executable from the **
 4. Open `DumbFish.app`.
 5. Start playing!
 
-> **macOS:** Because the application is not signed with an Apple Developer certificate, macOS may show a security warning when opening it. If this happens, right-click `DumbFish.app` and select **Open**, then confirm that you want to open it.
-
-Run from Source
-
-You can also run DumbFish directly from the source code.
-
-Requirements
-
-* Python 3
-* Pygame
-
-Install Pygame:
-
-```bash
-pip install pygame
-```
-
-Clone the repository:
-
-```bash
-git clone https://github.com/JujharSeehra/DumbFish.git
-cd DumbFish
-```
-
-Run the game:
-
-```bash
-python3 Chess.py
-```
-
 Make sure the `images` folder remains in the project directory because it contains the chess piece graphics.
 
-Features
+Features numerous advanced methods of evaluation, including
 
 * Custom chess engine
 * Alpha-beta pruning
 * Position evaluation
 * Piece-square tables
-* Pawn structure evaluation
-* Mobility evaluation
-* King safety evaluation
-* King activity evaluation
-* Bishop pair evaluation
-* Check and checkmate detection
-* Castling
-* En passant
-* Pawn promotion
+
+And more!
 
 Releases
 
 Compiled versions of DumbFish are available on the GitHub Releases page.
-
-The release contains a standalone executable, allowing users to play without installing Python or the project's dependencies.

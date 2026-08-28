@@ -6,23 +6,34 @@ import math
 import engine
 
 
+import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+    return os.path.join(base_path, relative_path)
+
 pygame.init()
 
 screen = pygame.display.set_mode((640,640))
 pygame.display.set_caption('Chess')
 
-WBishop = pygame.transform.scale(pygame.image.load('images/WBishop.png'), (80,80))
-BBishop = pygame.transform.scale(pygame.image.load('images/BBishop.png'), (80,80))
-WKing = pygame.transform.scale(pygame.image.load('images/WKing.png'), (80,80))
-BKing = pygame.transform.scale(pygame.image.load('images/BKing.png'), (80,80))
-WQueen = pygame.transform.scale(pygame.image.load('images/WQueen.png'), (80,80))
-BQueen = pygame.transform.scale(pygame.image.load('images/BQueen.png'), (80,80))
-WKnight = pygame.transform.scale(pygame.image.load('images/WKnight.png'), (80,80))
-BKnight = pygame.transform.scale(pygame.image.load('images/BKnight.png'), (80,80))
-WPawn = pygame.transform.scale(pygame.image.load('images/WPawn.png'), (80,80))
-BPawn = pygame.transform.scale(pygame.image.load('images/BPawn.png'), (80,80))
-WRook = pygame.transform.scale(pygame.image.load('images/WRook.png') , (80,80))
-BRook = pygame.transform.scale(pygame.image.load('images/BRook.png'), (80,80))
+WBishop = pygame.transform.scale(pygame.image.load(resource_path('images/WBishop.png')), (80,80))
+BBishop = pygame.transform.scale(pygame.image.load(resource_path('images/BBishop.png')), (80,80))
+WKing = pygame.transform.scale(pygame.image.load(resource_path('images/WKing.png')), (80,80))
+BKing = pygame.transform.scale(pygame.image.load(resource_path('images/BKing.png')), (80,80))
+WQueen = pygame.transform.scale(pygame.image.load(resource_path('images/WQueen.png')), (80,80))
+BQueen = pygame.transform.scale(pygame.image.load(resource_path('images/BQueen.png')), (80,80))
+WKnight = pygame.transform.scale(pygame.image.load(resource_path('images/WKnight.png')), (80,80))
+BKnight = pygame.transform.scale(pygame.image.load(resource_path('images/BKnight.png')), (80,80))
+WPawn = pygame.transform.scale(pygame.image.load(resource_path('images/WPawn.png')), (80,80))
+BPawn = pygame.transform.scale(pygame.image.load(resource_path('images/BPawn.png')), (80,80))
+WRook = pygame.transform.scale(pygame.image.load(resource_path('images/WRook.png')) , (80,80))
+BRook = pygame.transform.scale(pygame.image.load(resource_path('images/BRook.png')), (80,80))
 
 game_over = False
 

@@ -26,6 +26,9 @@ BRook = pygame.transform.scale(pygame.image.load('images/BRook.png'), (80,80))
 
 game_over = False
 
+computer_thinking = False
+computer_timer = pygame.USEREVENT + 1
+
 
 pieces = {
     -6: BKing,
@@ -54,11 +57,14 @@ selected_square = None
 
 def computer_move():
 
+    global computer_thinking
+
     print("COMPUTER TURN START")
 
     move = engine.find_best_move(depth=5)
 
     if move is None:
+        computer_thinking = False
         return
 
     old_row, old_col, new_row, new_col = move
@@ -77,6 +83,7 @@ def computer_move():
         new_col
     )
 
+    # Promotion
     for col in range(8):
 
         if allFunctions.pieceArray[7][col] == -1:
@@ -85,27 +92,53 @@ def computer_move():
         elif allFunctions.pieceArray[0][col] == 1:
             allFunctions.pieceArray[0][col] = 2
 
-    print(f"Evaluation: {evaluate_board(allFunctions.pieceArray, allFunctions.is_valid_move, allFunctions.move_leaves_king_in_check, allFunctions.is_in_check, allFunctions.can_attack_square)}")
+    evaluation = evaluate_board(
+        allFunctions.pieceArray,
+        allFunctions.is_valid_move,
+        allFunctions.move_leaves_king_in_check,
+        allFunctions.is_in_check,
+        allFunctions.can_attack_square
+    )
+
+    print(f"Evaluation: {evaluation}")
+
+    # Computer has moved, so it is now player's turn
+    computer_thinking = False
 
     status = allFunctions.check_game_status()
+
     if status == "checkmate":
+
         if allFunctions.turn % 2 == 1:
             winner = "White"
         else:
             winner = "Black"
+
         print(f"Checkmate! {winner} wins!")
+
+        global game_over
+        game_over = True
+
     elif status == "stalemate":
+
         print("Stalemate!")
-    elif status == 'check':
+        game_over = True
+
+    elif status == "check":
+
         print("Check!")
 
 while True:
     for event in pygame.event.get():
+        if event.type == computer_timer:
+            pygame.time.set_timer(computer_timer, 0)
+            if not game_over:
+                computer_move()
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
         
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and not computer_thinking and not game_over:
             mouse_x, mouse_y = event.pos
             row = mouse_y // 80
             col = mouse_x // 80
@@ -169,7 +202,8 @@ while True:
 
 
                         if allFunctions.turn % 2 == 1 and not game_over:
-                            computer_move()
+                            computer_thinking = True
+                            pygame.time.set_timer(computer_timer, 100)
 
                         
                 for i in range(8):

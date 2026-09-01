@@ -72,7 +72,7 @@ def computer_move():
 
     print("COMPUTER TURN START")
 
-    move = engine.find_best_move(depth=5)
+    move = engine.find_best_move(depth=3)
 
     if move is None:
         computer_thinking = False

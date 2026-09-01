@@ -108,7 +108,7 @@ def alpha_beta(depth, alpha, beta, player, ply):
         transpositionTable[get_position_keys()] = (depth, best_score)
         return best_score
 
-def find_best_move(depth=5):
+def find_best_move(depth=3):
     global nodes_searched
 
     nodes_searched = 0

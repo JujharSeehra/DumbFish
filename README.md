@@ -11,7 +11,7 @@ The easiest way to run DumbFish is to download the latest executable from the **
 1. Open the [latest release](../../releases/latest).
 2. Download `DumbFish-v1.0.0-macOS.zip`.
 3. Extract the `.zip` file.
-4. Open `DumbFish.app`.
+4. Run the command `python3 chess.py`.
 5. Start playing!
 
 Make sure the `images` folder remains in the project directory because it contains the chess piece graphics.
